@@ -9,34 +9,35 @@ import tmp
 import epubzip
 
 # Creat The Epub Structure Dir
-# os.makedirs(r'epubobject/OEBPS')     # On Windows
-# os.makedirs(r'epubobject/META-INF')  # On Windows
-os.makedirs('epubobject/OEBPS')
-os.makedirs('epubobject/META-INF')
+os.makedirs(r'epubobject/OEBPS')     # On Windows
+os.makedirs(r'epubobject/META-INF')  # On Windows
+# os.makedirs('epubobject/OEBPS') # On *nix
+# os.makedirs('epubobject/META-INF') # On *nix
 
 # Creat The MimeType File
-#mimetype = open(r'epubobject/mimetype','w')
-mimetype = open('epubobject/mimetype', 'w')
+mimetype = open(r'epubobject/mimetype', 'w', encoding='utf8')  # On Windows
+# mimetype = open('epubobject/mimetype', 'w')
 mimetype.write(tmp.mimetype_tmp())
 mimetype.close()
 
 # Creat the container.xml, it's in META-INF/
-#container = open(r'epubobject/META-INF/container.xml','w')
-container = open('epubobject/META-INF/container.xml', 'w')
+container = open(r'epubobject/META-INF/container.xml',
+                 'w', encoding='utf8')  # On Windows
+# container = open('epubobject/META-INF/container.xml', 'w') # On *nix
 container.write(tmp.container_tmp())
 container.close()
 
 # Move the images & css files into the epubobject folder
 if os.path.exists('./images'):
-    #shutil.copytree(r'./images', r'epubobject/OEBPS/images')
-    shutil.copytree('./images', 'epubobject/OEBPS/images')
+    shutil.copytree(r'./images', r'epubobject/OEBPS/images')  # On Windows
+    # shutil.copytree('./images', 'epubobject/OEBPS/images') # On *nix
 
 if os.path.exists('./style'):
-    # shutil.copytree(r'./style', r'epubobject/OEBPS/style')
-    shutil.copytree('./style', 'epubobject/OEBPS/style')
+    shutil.copytree(r'./style', r'epubobject/OEBPS/style')  # On Windows
+    # shutil.copytree('./style', 'epubobject/OEBPS/style') # On *nix
 
 # Creat the Book Files
-f = open('index.html', 'r')
+f = open('index.html', 'r', encoding='utf8')
 html_doc = f.readlines()
 f.close()
 
@@ -76,8 +77,9 @@ for j in range(0, chapter_nums):
     chap_con = '    '.join(chap_con_pre)
     chap_out_pre = tmp.html_tmp(chap_title, chap_con, style_con)
     num = str(j).rjust(chapter_len, '0')
-    #chap_out = open('epubobject\\OEBPS\\c' + num + '.xhtml','w')
-    chap_out = open('epubobject/OEBPS/c' + num + '.xhtml', 'w')
+    chap_out = open('epubobject\\OEBPS\\c' + num +
+                    '.xhtml', 'w', encoding='utf8')  # On Windows
+    # chap_out = open('epubobject/OEBPS/c' + num + '.xhtml', 'w') # On *nix
     chap_out.write(chap_out_pre)
     chap_out.close()
 
@@ -141,8 +143,9 @@ spine_out = '    '.join(spine_out_pre)
 opf_out_pre = tmp.opf_tmp(uuidnum, book_title, book_author,
                           creatdate, manifest_out, spine_out)
 
-#opf_out = open('epubobject\\OEBPS\\content.opf','w')
-opf_out = open('epubobject/OEBPS/content.opf', 'w')
+opf_out = open('epubobject\\OEBPS\\content.opf',
+               'w', encoding='utf8')  # On Windows
+# opf_out = open('epubobject/OEBPS/content.opf', 'w') # On *nix
 opf_out.write(opf_out_pre)
 opf_out.close()
 
@@ -162,8 +165,9 @@ navmap_out = '\n'.join(navmap_out_pre)
 
 ncx_out_pre = tmp.ncx_tmp(uuidnum, book_title, navmap_out)
 
-#ncx_out = open('epubobject\\OEBPS\\toc.ncx', 'w')
-ncx_out = open('epubobject/OEBPS/toc.ncx', 'w')
+ncx_out = open('epubobject\\OEBPS\\toc.ncx', 'w',
+               encoding='utf8')  # On Windows
+# ncx_out = open('epubobject/OEBPS/toc.ncx', 'w') # On *nix
 ncx_out.write(ncx_out_pre)
 ncx_out.close()
 
@@ -172,5 +176,5 @@ ncx_out.close()
 epubzip.epubzip('epubobject', book_title)
 
 # Delete the workspace
-# shutil.rmtree(r'epubobject/')
-shutil.rmtree('epubobject/')
+shutil.rmtree(r'epubobject/')  # On Windows
+# shutil.rmtree('epubobject/') # On *nix

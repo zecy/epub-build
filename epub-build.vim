@@ -47,65 +47,35 @@ function SymbolChange() "{{{1
 
     :silent call Full2half()
 
-python << EOF
- 
-# -*- coding: UTF-8 -*- 
-
-import vim
-import string
-import re
-
-b = vim.current.buffer
-
-t = u'\n'.encode("UTF-8").join(b)
-
-t = t.decode("UTF-8")
-
-def symbolchange(t):
-
-    t = re.sub(u'( |\t|　)+', u' ', t)
-    t = re.sub(u' +$', '', t)
-    t = re.sub(u'[\[“【]', u'「', t)
-    t = re.sub(u'[\]”】]', u'」', t)
-    t = re.sub(u'‘', u"『", t)
-    t = re.sub(u'’', u"』", t)
-    t = string.replace(t, "&", u"＆")
-    t = string.replace(t, u"!?", u"?!")
-    t = string.replace(t, u"!", u"！")
-    t = string.replace(t, u"?", u"？")
-    t = string.replace(t, u"！？", u"！？")
-    t = re.sub(u'…+|。{2,}|\.{2,}', u'……', t)
-    t = re.sub(u'—+', u'——', t)
-    t = re.sub(u'^ +', '', t)
-    t = re.sub(u'(\n)+', u'\n', t)
-    t = string.replace(t, u"：", u":")
-    t = string.replace(t, u"（", u"(")
-    t = string.replace(t, u"）", u")")
-    t = string.replace(t, "<", u"〈") 
-    t = string.replace(t, ">", u"〉")
-    t = re.sub(u'([—.…])[!?。？！，,]+', u'\g<1>', t)
-    t = re.sub(u'(—)[.…]+', u'\g<1>', t)
-    t = re.sub(u'([.…])—+', u'\g<1>', t)
-
-    return t
-
-t = symbolchange(t)
-
-t = t.encode("UTF-8").split('\n')
-
-b[:] = None
-
-b.append(t[1:])
-
-b[0] = None
-EOF
-
-:silent %s/^ \+//ge
-:silent %s/^$\n//ge
-:silent %s`[^"!?.)——。！？”……）＊※☆★□■♢\*」]\zs\ze」$`。`ge
-:silent %s`！？`？！`ge
-:silent %s`[！？，。]\+\ze[—…]``ge
-:silent %s`[—…]\zs[！？，。]\+``ge
+    :silent %s`\( \|\t\|　\)\+` `ge
+    :silent %s` \+$``ge
+    :silent %s`[\[“【]`「`ge
+    :silent %s`[\]”】]`」`ge
+    :silent %s`‘`『`ge
+    :silent %s`’`』`ge
+    :silent %s`&`＆`ge
+    :silent %s`!?`?!`ge
+    :silent %s`!`！`ge
+    :silent %s`?`？`ge
+    :silent %s`！？`！？`ge
+    :silent %s`…\+\|。\{2,}\|\.\{2,}`……`ge
+    :silent %s`—\+`——`ge
+    :silent %s`^ \+``ge
+    :silent %s`\(\n\)+`\r`ge
+    :silent %s`：`:`ge
+    :silent %s`（`(`ge
+    :silent %s`）`)`ge
+    :silent %s`<`〈`ge
+    :silent %s`>`〉`ge
+    :silent %s`[—.…]\zs[!?。？！，,]\+``ge
+    :silent %s`—\zs[.…]\+``ge
+    :silent %s`[.…]\zs—\+``ge
+    :silent %s/^ \+//ge
+    :silent %s/^$\n//ge
+    :silent %s`[^"!?.)——。！？”……）＊※☆★□■♢\*」]\zs\ze」$`。`ge
+    :silent %s`！？`？！`ge
+    :silent %s`[！？，。]\+\ze[—…]``ge
+    :silent %s`[—…]\zs[！？，。]\+``ge
 endfunction "}}}1
 
 function SentenceConnect() "{{{1
@@ -334,6 +304,8 @@ silent ! ~/.vim/bundle/epub-build/plugin/py/download-syosetu.py
 endfunction "}}}1
 
 function EpubZip() "{{{1
-    silent ! python3 ~/.vim/bundle/epub-build/plugin/py/strucreat.py
+    silent ! python C:\Users\zecy\vimfiles\bundle\epub-build\plugin\py\strucreat.py
+    " Windows 下在远程路径上使用需要解决 UNC 路径问题
+    " https://blog.csdn.net/zhizunbao84/article/details/53331630
 endfunction "}}}1
 command! Epubzip call EpubZip()
