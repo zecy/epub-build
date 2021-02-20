@@ -1,11 +1,12 @@
-# -*- coding: UTF-8 -*- 
+# -*- coding: UTF-8 -*-
 
-## This is a template file
+# This is a template file
 
 def mimetype_tmp():
     """the mimetpye file. return string"""
     tmp = 'application/epub+zip'
     return tmp
+
 
 def container_tmp():
     """the container.xml file. return string"""
@@ -18,6 +19,7 @@ def container_tmp():
 </container>"""
 
     return tmp
+
 
 def html_tmp(chap_title, chap_con, style_con):
     """the html tmp. return string."""
@@ -33,7 +35,7 @@ def html_tmp(chap_title, chap_con, style_con):
     {%content%}
 </body>
 </html>"""
-    
+
     tmp = tmp.replace('{%title%}', chap_title)
 
     tmp = tmp.replace('{%content%}', chap_con)
@@ -42,7 +44,8 @@ def html_tmp(chap_title, chap_con, style_con):
 
     return tmp
 
-def opf_tmp(uuidnum, book_title, book_author, creatdate, manifest, spine):
+
+def opf_tmp(uuidnum, book_title, book_author, creatdate, manifest, spine, coverpage):
     """the content.opf file. return string"""
     tmp = """<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookId" version="2.0">
@@ -64,7 +67,7 @@ def opf_tmp(uuidnum, book_title, book_author, creatdate, manifest, spine):
     {%itemref%}
   </spine>
   <guide>
-    <reference href="c00.xhtml" title="cover" type="cover" />
+    <reference href="{%coverpage%}" title="cover" type="cover" />
   </guide>
 </package>"""
 
@@ -74,13 +77,15 @@ def opf_tmp(uuidnum, book_title, book_author, creatdate, manifest, spine):
     tmp = tmp.replace('{%date%}', creatdate)
     tmp = tmp.replace('{%items%}', manifest)
     tmp = tmp.replace('{%itemref%}', spine)
+    tmp = tmp.replace('{%coverpage%}', coverpage)
 
     return tmp
+
 
 def navmap_tmp(playorder, chap_title, ncx_nav_list):
     """it's in toc.ncx"""
 
-    tmp ="""<navPoint id="chapter{%playorder%}" playOrder="{%playorder%}">
+    tmp = """<navPoint id="chapter{%playorder%}" playOrder="{%playorder%}">
     <navLabel>
         <text>{%chaptitle%}</text>
     </navLabel>
@@ -92,6 +97,7 @@ def navmap_tmp(playorder, chap_title, ncx_nav_list):
     tmp = tmp.replace('{%chap_src%}', ncx_nav_list)
 
     return tmp
+
 
 def ncx_tmp(uuidnum, book_title, navmap_out):
     """the toc.ncx file. return string"""

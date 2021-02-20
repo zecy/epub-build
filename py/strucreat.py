@@ -59,6 +59,7 @@ for i in range(2, len(html_doc)):
 
 chapter_nums = len(title_line_nums)     # 总共有多少章
 chapter_len = len(str(chapter_nums))    # 总章节数的位数
+coverpage_pre = ''                      # 记录放封面的文件名称
 
 for j in range(0, chapter_nums):
     chap_title = html_doc[title_line_nums[j]]  # 取得章节标题
@@ -80,6 +81,8 @@ for j in range(0, chapter_nums):
     chap_out = open('epubobject\\OEBPS\\c' + num +
                     '.xhtml', 'w', encoding='utf8')  # On Windows
     # chap_out = open('epubobject/OEBPS/c' + num + '.xhtml', 'w') # On *nix
+    if j == 0:
+        coverpage_pre = 'c' + num + '.xhtml'
     chap_out.write(chap_out_pre)
     chap_out.close()
 
@@ -139,9 +142,10 @@ for l in range(0, len(fileslist)):
 
 manifest_out = '    '.join(manifest_out_pre)
 spine_out = '    '.join(spine_out_pre)
+coverpage = '    ' + coverpage_pre
 
 opf_out_pre = tmp.opf_tmp(uuidnum, book_title, book_author,
-                          creatdate, manifest_out, spine_out)
+                          creatdate, manifest_out, spine_out, coverpage_pre)
 
 opf_out = open('epubobject\\OEBPS\\content.opf',
                'w', encoding='utf8')  # On Windows
